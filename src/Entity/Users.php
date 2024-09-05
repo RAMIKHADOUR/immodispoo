@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -39,6 +43,34 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
+    /**
+     * @var Collection<int, Annonces>
+     */
+    #[ORM\OneToMany(targetEntity: Annonces::class, mappedBy: 'users')]
+    private Collection $annonceId;
+
+    /**
+     * @var Collection<int, Messages>
+     */
+    #[ORM\OneToMany(targetEntity: Messages::class, mappedBy: 'users')]
+    private Collection $messageId;
+
+    /**
+     * @var Collection<int, Contacts>
+     */
+    #[ORM\OneToMany(targetEntity: Contacts::class, mappedBy: 'users')]
+    private Collection $contactId;
+
+    public function __construct()
+    {
+        $this->annonceId = new ArrayCollection();
+        $this->messageId = new ArrayCollection();
+        $this->contactId = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -147,6 +179,108 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Annonces>
+     */
+    public function getAnnonceId(): Collection
+    {
+        return $this->annonceId;
+    }
+
+    public function addAnnonceId(Annonces $annonceId): static
+    {
+        if (!$this->annonceId->contains($annonceId)) {
+            $this->annonceId->add($annonceId);
+            $annonceId->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnonceId(Annonces $annonceId): static
+    {
+        if ($this->annonceId->removeElement($annonceId)) {
+            // set the owning side to null (unless already changed)
+            if ($annonceId->getUsers() === $this) {
+                $annonceId->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Messages>
+     */
+    public function getMessageId(): Collection
+    {
+        return $this->messageId;
+    }
+
+    public function addMessageId(Messages $messageId): static
+    {
+        if (!$this->messageId->contains($messageId)) {
+            $this->messageId->add($messageId);
+            $messageId->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessageId(Messages $messageId): static
+    {
+        if ($this->messageId->removeElement($messageId)) {
+            // set the owning side to null (unless already changed)
+            if ($messageId->getUsers() === $this) {
+                $messageId->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Contacts>
+     */
+    public function getContactId(): Collection
+    {
+        return $this->contactId;
+    }
+
+    public function addContactId(Contacts $contactId): static
+    {
+        if (!$this->contactId->contains($contactId)) {
+            $this->contactId->add($contactId);
+            $contactId->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactId(Contacts $contactId): static
+    {
+        if ($this->contactId->removeElement($contactId)) {
+            // set the owning side to null (unless already changed)
+            if ($contactId->getUsers() === $this) {
+                $contactId->setUsers(null);
+            }
+        }
 
         return $this;
     }

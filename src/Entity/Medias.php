@@ -19,6 +19,9 @@ class Medias
     #[ORM\Column(length: 255)]
     private ?string $type_media = null;
 
+    #[ORM\ManyToOne(inversedBy: 'mediaId')]
+    private ?Annonces $annonces = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Medias
     public function setTypeMedia(string $type_media): static
     {
         $this->type_media = $type_media;
+
+        return $this;
+    }
+
+    public function getAnnonces(): ?Annonces
+    {
+        return $this->annonces;
+    }
+
+    public function setAnnonces(?Annonces $annonces): static
+    {
+        $this->annonces = $annonces;
 
         return $this;
     }
