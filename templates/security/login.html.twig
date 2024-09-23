@@ -1,37 +1,92 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}Log in!{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <link rel="stylesheet" href="{{asset('/css/login.css')}}">
+    {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
+    <title>Page-Connexion</title>
+</head>
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+<body class="d-flex h-100 text-center">
+    <div class="cover-container d-flex w-100 h-100 p-2 mx-auto flex-column">
+        <header class="mb-auto">
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <div class="navbar">
+                <div class="container-fluid">
+                    <div>
+                        <img src="/img/logo.png" alt="logo" width="45%" class="m-2">
+                    </div>
+                    <div>
+                        <a class="text-decoration-none m-4 fs-5 fw-bolder" id="accueil"
+                            href="{{path('app_home')}}">Accueil</a>
+                           
+                    <a class="m-2 text-white fs-5 fw-bold" id="inscrire" href="">S'Inscrire</a>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+        <main class="m-5">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <form method="post">
+                            {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData,
+                                'security') }}</div>
+                            {% endif %}
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+                            {% if app.user %}
+                            <div class="mb-3 text-warning">
+                                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, 
+                            </div>
+                            {% endif %}
+
+                            <h1 class="h3 mb-3 fw-bolder" id="connexion">Connexion</h1>
+                            <label for="inputEmail"></label>
+                            <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                                class="form-control" autocomplete="email" required autofocus placeholder="Votre Email">
+                            <label for="inputPassword"></label>
+                            <input type="password" name="password" id="inputPassword" class="form-control"
+                                autocomplete="current-password" required placeholder="Votre Mot de Passe">
+
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            <br>
+                            <div class="checkbox mb-2 fw-bolder" id="souvenir">
+                                <label>
+                                    <input type="checkbox" name="_remember_me" checked>
+                                    Se souvenir de moi <a class="text-decoration-none text-danger m-5"
+                                        href="{{ path('app_forgot_password_request') }}">Mot de Passe Oublié</a>
+                                        
+                                </label>
+                            </div>
+
+                            <button class="btn btn-lg btn-success mt-4 fw-bold text-white" id="connecter" type="submit">
+                                Se connecter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="text-center">
+                <h6 class="text-black">Je n'ai pas de compte.Je m'en
+                    <a href="" class=" text-decoration-none text-danger"> crée </a> un.
+                </h6>
+            </div>
+        </main>
+
     </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
-{% endblock %}
+    {% endblock %}
+</body>
+
+</html>

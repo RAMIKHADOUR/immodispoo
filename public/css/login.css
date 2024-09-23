@@ -1,0 +1,35 @@
+body{
+    background: rgb(198,235,209);
+background: linear-gradient(0deg, rgba(198,235,209,1) 0%, rgba(255,255,255,1) 100%);
+}
+#connexion{
+    color:rgb(79, 192, 59);
+}
+#accueil{
+    color:rgb(79, 192, 59);
+}
+#inscrire{
+  background-color: rgb(79, 192, 59);
+  border: none;
+  color: white;
+  padding: 8px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  border-radius: 12px;
+}
+#souvenir{
+    color:rgb(79, 192, 59)
+}
+#connecter{
+    background-color: rgb(79, 192, 59);
+    border: none;
+    color: white;
+    padding: 8px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    border-radius: 12px;
+  }
